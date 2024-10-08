@@ -1,9 +1,7 @@
-# Discover Dead Domains
+# Dead Domain Discovery
 
 This Chromium extensions aims to identify abandoned domains that are referenced by a website for instance within an iFrame, as script or as CSS source.     
 If an abandoned domain is used within these sinks, which can be registered by malicious actors, this could for instance lead to *Cross-Site Scripting* or website defacement vulnerabilities. 
-
-
 
 ## Features
 * Gather relevant sources, keep track of previously encountered domains
