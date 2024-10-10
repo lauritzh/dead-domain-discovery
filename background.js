@@ -5,6 +5,8 @@
 const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
 chrome.webNavigation.onCompleted.addListener((details) => {
+  if (details?.tab?.url?.startsWith("chrome://")) return undefined;
+
   chrome.scripting.executeScript({
     target: { tabId: details.tabId },
     files: ['content.js']
