@@ -33,20 +33,26 @@ function checkAndStoreDomains(domains, pageUrl) {
 
     domains.forEach(domain => {
       if (!storedDomains.hasOwnProperty(domain.domain)) {
-        resolveDomain(domain.domain, (resolvable) => {
-          storedDomains[domain.domain] = {
-            timestamp: now,
-            pageUrl: domain.pageUrl,
-            sinkElement: domain.sinkElement
-          };
-          chrome.storage.local.set({ domains: storedDomains });
-          if (!resolvable) {
-            createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
-          }
-        });
+        if (!isIpAddress(domain.domain)) {
+          resolveDomain(domain.domain, (resolvable) => {
+            storedDomains[domain.domain] = {
+              timestamp: now,
+              pageUrl: domain.pageUrl,
+              sinkElement: domain.sinkElement
+            };
+            chrome.storage.local.set({ domains: storedDomains });
+            if (!resolvable) {
+              createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
+            }
+          });
+        }
       }
     });
   });
+}
+
+function isIpAddress(domain) {
+  return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(domain);
 }
 
 function resolveDomain(domain, callback) {

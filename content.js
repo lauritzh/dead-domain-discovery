@@ -113,9 +113,13 @@ function scanPage() {
     domain: (new URL(resource.url)).hostname,
     pageUrl: pageUrl,
     sinkElement: resource.element
-  }));
+  })).filter(domainObj => !isIpAddress(domainObj.domain));
 
   chrome.runtime.sendMessage({ type: 'checkDomains', domains: domains });
+}
+
+function isIpAddress(domain) {
+  return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(domain);
 }
 
 scanPage();
