@@ -15,29 +15,33 @@ chrome.webNavigation.onCompleted.addListener((details) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'checkDomains') {
-    checkAndStoreDomains(message.domains);
+    checkAndStoreDomains(message.domains, message.pageUrl);
   }
 });
 
-function checkAndStoreDomains(domains) {
+function checkAndStoreDomains(domains, pageUrl) {
   chrome.storage.local.get(['domains'], (result) => {
     let storedDomains = result.domains || {};
     const now = Date.now();
 
     // Clean up old entries
     for (let domain in storedDomains) {
-      if (storedDomains[domain] < now - WEEK_IN_MS) {
+      if (storedDomains[domain].timestamp < now - WEEK_IN_MS) {
         delete storedDomains[domain];
       }
     }
 
     domains.forEach(domain => {
-      if (!storedDomains.hasOwnProperty(domain)) {
-        resolveDomain(domain, (resolvable) => {
-          storedDomains[domain] = now;
+      if (!storedDomains.hasOwnProperty(domain.domain)) {
+        resolveDomain(domain.domain, (resolvable) => {
+          storedDomains[domain.domain] = {
+            timestamp: now,
+            pageUrl: domain.pageUrl,
+            sinkElement: domain.sinkElement
+          };
           chrome.storage.local.set({ domains: storedDomains });
           if (!resolvable) {
-            createNotification(`Domain not resolvable, but used to load external contents: ${domain}`);
+            createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
           }
         });
       }

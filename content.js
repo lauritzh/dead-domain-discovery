@@ -18,11 +18,13 @@ function scanPage() {
     audios: []
   };
 
+  const pageUrl = window.location.href;
+
   // Collect iframes
   document.querySelectorAll('iframe').forEach(iframe => {
     const src = iframe.src;
     if (src && isHttpUrl(src)) {
-      resources.iframes.push(src);
+      resources.iframes.push({ url: src, element: 'iframe' });
     }
   });
 
@@ -30,7 +32,7 @@ function scanPage() {
   document.querySelectorAll('script').forEach(script => {
     const src = script.src;
     if (src && isHttpUrl(src)) {
-      resources.scripts.push(src);
+      resources.scripts.push({ url: src, element: 'script' });
     }
   });
 
@@ -38,7 +40,7 @@ function scanPage() {
   document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
     const href = link.href;
     if (href && isHttpUrl(href)) {
-      resources.styles.push(href);
+      resources.styles.push({ url: href, element: 'link[rel="stylesheet"]' });
     }
   });
 
@@ -46,7 +48,7 @@ function scanPage() {
   document.querySelectorAll('a').forEach(anchor => {
     const href = anchor.href;
     if (href && isHttpUrl(href)) {
-      resources.anchors.push(href);
+      resources.anchors.push({ url: href, element: 'a' });
     }
   });
 
@@ -54,7 +56,7 @@ function scanPage() {
   document.querySelectorAll('object').forEach(object => {
     const data = object.data;
     if (data && isHttpUrl(data)) {
-      resources.objects.push(data);
+      resources.objects.push({ url: data, element: 'object' });
     }
   });
 
@@ -62,7 +64,7 @@ function scanPage() {
   document.querySelectorAll('img').forEach(img => {
     const src = img.src;
     if (src && isHttpUrl(src)) {
-      resources.images.push(src);
+      resources.images.push({ url: src, element: 'img' });
     }
   });
 
@@ -70,13 +72,13 @@ function scanPage() {
   document.querySelectorAll('video').forEach(video => {
     const src = video.src;
     if (src && isHttpUrl(src)) {
-      resources.videos.push(src);
+      resources.videos.push({ url: src, element: 'video' });
     }
     // Check for sources within <source> tags
     video.querySelectorAll('source').forEach(source => {
       const src = source.src;
       if (src && isHttpUrl(src)) {
-        resources.videos.push(src);
+        resources.videos.push({ url: src, element: 'video > source' });
       }
     });
   });
@@ -85,20 +87,20 @@ function scanPage() {
   document.querySelectorAll('audio').forEach(audio => {
     const src = audio.src;
     if (src && isHttpUrl(src)) {
-      resources.audios.push(src);
+      resources.audios.push({ url: src, element: 'audio' });
     }
     // Check for sources within <source> tags
     audio.querySelectorAll('source').forEach(source => {
       const src = source.src;
       if (src && isHttpUrl(src)) {
-        resources.audios.push(src);
+        resources.audios.push({ url: src, element: 'audio > source' });
       }
     });
   });
 
   console.log('External resources:', resources);
 
-  const urls = [
+  const domains = [
     ...resources.iframes,
     ...resources.scripts,
     ...resources.styles,
@@ -107,9 +109,11 @@ function scanPage() {
     ...resources.images,
     ...resources.videos,
     ...resources.audios
-  ];
-  
-  const domains = Array.from(new Set(urls.map(url => (new URL(url)).hostname)));
+  ].map(resource => ({
+    domain: (new URL(resource.url)).hostname,
+    pageUrl: pageUrl,
+    sinkElement: resource.element
+  }));
 
   chrome.runtime.sendMessage({ type: 'checkDomains', domains: domains });
 }

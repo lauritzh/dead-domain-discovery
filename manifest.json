@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Dead Domain Discovery",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Scans the page for external iFrames, Scripts, and Styles, logs them to the console, and checks if their domains are resolvable.",
   "permissions": [
     "activeTab",
