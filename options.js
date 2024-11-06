@@ -1,3 +1,7 @@
+//
+// (c) Lauritz Holtmann
+//
+
 const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
 const saveOptions = () => {

@@ -3,7 +3,7 @@
 <!-- https://github.com/lauritzh/dead-domain-discovery -->
 <html>
   <head>
-    <title>External Resource Scanner</title>
+    <title>Dead Domain Discovery v0.4</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -41,42 +41,57 @@
         margin-top: 20px;
         color: #95a5a6;
       }
+      .stats {
+        font-size: 14px;
+        margin: 10px 0;
+      }
+      .button {
+        margin: 5px 0;
+        padding: 5px 10px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #2980b9;
+      }
+      details:has(#findings) {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-weight: bold;
+      }
+      details:has(#findings) li {
+        font-weight:normal;
+      }
     </style>
   </head>
   <body>
-    <h1>Dead Domain Discovery v0.2</h1>
-    <p>&copy; Lauritz Holtmann</p>
-    <ul>
-      <li>
-        <a href="https://hackerone.com/lauritz" target="_blank">H1: lauritz</a>
-      </li>
-      <li>
-        <a href="https://yeswehack.com/hunters/lauritz" target="_blank"
-          >YWH: lauritz</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://app.intigriti.com/researcher/profile/_lauritz_"
-          target="_blank"
-          >Intigriti: _lauritz_</a
-        >
-      </li>
-      <li>
-        <a href="https://bugcrowd.com/lauritz" target="_blank"
-          >Bugcrowd: lauritz</a
-        >
-      </li>
-    </ul>
+    <h1>Dead Domain Discovery v0.4</h1>
+    <div class="stats">
+      <p id="domain-stats">Found 0 Dead Domains</p>
+    </div>
+    <button class="button" id="go-to-options">Go to options</button>
+    <button class="button" id="clear-findings">Clear Cached Domains</button>
+    <details>
+      <summary>Show recent findings</summary>
+      <ul id="findings"> 
+      </ul>
+    </details>
+    <p>
+      <a href="https://github.com/lauritzh/dead-domain-discovery" target="_blank">GitHub Repository</a>
+    </p>
     <div class="footer">
-      <p>
-        <a
-          href="https://github.com/lauritzh/dead-domain-discovery"
-          target="_blank"
-          >GitHub Repository</a
-        >
-      </p>
-      <p><button id="go-to-options">Go to options</button></p>
+      <details>
+        <summary>&copy; Lauritz Holtmann - I am open for collaboration :)</summary>
+        <ul>
+          <li><a href="https://hackerone.com/lauritz" target="_blank">H1: lauritz</a></li>
+          <li><a href="https://yeswehack.com/hunters/lauritz" target="_blank">YWH: lauritz</a></li>
+          <li><a href="https://app.intigriti.com/researcher/profile/_lauritz_" target="_blank">Intigriti: _lauritz_</a></li>
+          <li><a href="https://bugcrowd.com/lauritz" target="_blank">Bugcrowd: lauritz</a></li>
+        </ul>
+      </details>
     </div>
     <script src="popup.js"></script>
   </body>
