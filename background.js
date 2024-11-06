@@ -19,35 +19,40 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-function checkAndStoreDomains(domains, pageUrl) {
-  chrome.storage.local.get(['domains'], (result) => {
-    let storedDomains = result.domains || {};
-    const now = Date.now();
+function checkAndStoreDomains(pageDomains, pageUrl) {
+  chrome.storage.local.get(['domains'], ({ domains }) => {
+    chrome.storage.sync.get(
+      { cacheDuration: WEEK_IN_MS },
+      ({ cacheDuration }) => {
 
-    // Clean up old entries
-    for (let domain in storedDomains) {
-      if (storedDomains[domain].timestamp < now - WEEK_IN_MS) {
-        delete storedDomains[domain];
-      }
-    }
+        let storedDomains = domains || {};
+        const now = Date.now();
 
-    domains.forEach(domain => {
-      if (!storedDomains.hasOwnProperty(domain.domain)) {
-        if (!isIpAddress(domain.domain)) {
-          resolveDomain(domain.domain, (resolvable) => {
-            storedDomains[domain.domain] = {
-              timestamp: now,
-              pageUrl: domain.pageUrl,
-              sinkElement: domain.sinkElement
-            };
-            chrome.storage.local.set({ domains: storedDomains });
-            if (!resolvable) {
-              createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
-            }
-          });
+        // Clean up old entries
+        for (let domain in storedDomains) {
+          if (storedDomains[domain].timestamp < now - cacheDuration) {
+            delete storedDomains[domain];
+          }
         }
-      }
-    });
+
+        pageDomains.forEach(domain => {
+          if (!storedDomains.hasOwnProperty(domain.domain)) {
+            if (!isIpAddress(domain.domain)) {
+              resolveDomain(domain.domain, (resolvable) => {
+                storedDomains[domain.domain] = {
+                  timestamp: now,
+                  pageUrl: domain.pageUrl,
+                  sinkElement: domain.sinkElement
+                };
+                chrome.storage.local.set({ domains: storedDomains });
+                if (!resolvable) {
+                  createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
+                }
+              });
+            }
+          }
+        });
+      });
   });
 }
 
@@ -56,7 +61,7 @@ function isIpAddress(domain) {
 }
 
 function resolveDomain(domain, callback) {
-  if(domain.trim() != '') {
+  if (domain.trim() != '') {
     fetch(`https://dns.google/resolve?name=${domain}`)
       .then(response => response.json())
       .then(data => {
