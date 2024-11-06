@@ -25,5 +25,13 @@ If you found any vulnerability in this repository, please use GitHub's [private 
 ## Credits
 This project was inspired by [Süleyman Çelikarslan's (@slymn_clkrsln)](https://x.com/slymn_clkrsln) tweets about [second order domain takeover vulnerabilities](https://twitter.com/slymn_clkrsln/status/1792995208562401567).
 
+## Contributors
+If you are missing a feature or found a bug, feel free to open a pull request!
+
+These awesome people already contributed to this repo:     
+<img src="https://github.com/svennergr.png" width="60px;"/><br /><sub><a href="https://github.com/svennergr">svennergr</a></sub>
+
+Thanks a lot!
+
 ## Disclaimer
 *Any information shared within this repository must not be used with malicious intentions. This tool is shared for educational purposes only. Any malicious use will not hold the author responsible.*
