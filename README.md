@@ -16,6 +16,16 @@ Steps to install:
 3. Enable *Developer mode* (attention, do not enable this option in your "productive" browser!).
 4. Load the unpacked extension from `/dead-domain-discovery`.
 
+## FAQ
+
+<details><summary>Why do I not get any results?</summary>
+
+This extension uses the [Chrome Notification API](https://developer.chrome.com/docs/extensions/reference/api/notifications). Make sure to allow notifications for Chrome/Chromium:
+
+![Settings](/img/notification1.png)
+![Notification](/img/notification2.png)
+</details>
+
 ## Privacy
 The extension does not disclose any information to its author, but uses an HTTP GET request to `https://dns.google/resolve?name=${domain}` to lookup newly discovered domains. Please note that when activated, the extension runs in background and analyses all page loads.
 
