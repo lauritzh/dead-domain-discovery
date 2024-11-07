@@ -49,6 +49,8 @@ function scanPage() {
     const href = anchor.href;
     if (href && isHttpUrl(href)) {
       resources.anchors.push({ url: href, element: 'a' });
+    } else if (href && href.startsWith('mailto:')) {
+      resources.anchors.push({ url: href.replace('mailto:','mailto://'), element: 'a > mailto' });
     }
   });
 
