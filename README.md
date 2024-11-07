@@ -33,7 +33,9 @@ The extension does not disclose any information to its author, but uses an HTTP 
 If you found any vulnerability in this repository, please use GitHub's [private vulnerability reporting](https://github.com/lauritzh/dead-domain-discovery/security) instead of opening a public issue.
 
 ## Credits
-This project was inspired by [Süleyman Çelikarslan's (@slymn_clkrsln)](https://x.com/slymn_clkrsln) tweets about [second order domain takeover vulnerabilities](https://twitter.com/slymn_clkrsln/status/1792995208562401567).
+This project was inspired by [Süleyman Çelikarslan's (@slymn_clkrsln)](https://twitter.com/slymn_clkrsln) tweets about [second order domain takeover vulnerabilities](https://twitter.com/slymn_clkrsln/status/1792995208562401567).
+
+In v0.5, a lookup for domains encountered in `mailto:` URLs was added, based on [@0xLupin](https://twitter.com/0xLupin)'s awesome [blog post about ATOs caused by abandoned e-mail domains](https://www.landh.tech/blog/20241107-10-to-hack-millions-of-companies/).
 
 ## Contributors
 If you are missing a feature or found a bug, feel free to open a pull request!
