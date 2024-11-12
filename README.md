@@ -49,7 +49,8 @@ In v0.5, a lookup for domains encountered in `mailto:` URLs was added, based on 
 If you are missing a feature or found a bug, feel free to open a pull request!
 
 These awesome people already contributed to this repo:     
-<img src="https://github.com/svennergr.png" width="60px;"/><br /><sub><a href="https://github.com/svennergr">svennergr</a></sub>
+<img src="https://github.com/svennergr.png" width="60px;"/><br /><sub><a href="https://github.com/svennergr">svennergr</a></sub>     
+<img src="https://github.com/TightropeMonkey.png" width="60px;"/><br /><sub><a href="https://github.com/TightropeMonkey">TightropeMonkey</a></sub>
 
 Thanks a lot!
 
