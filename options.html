@@ -4,8 +4,15 @@
     <title>Dead Domain Discovery Options</title>
   </head>
   <body>
-    <label for="cache-duration">Cache Duration in ms:</label>
+    <label for="cache-duration">Cache Duration in ms:</label><br>
     <input type="number" id="cache-duration" />
+
+    <br></br>
+
+    <label for="ignored-domains">Do not perform scans for domains encountered on following domains (one per line):</label><br>
+    <textarea id="ignored-domains" rows="10" cols="30"></textarea>
+
+    <br></br>
 
     <button id="save">Save</button>
 
