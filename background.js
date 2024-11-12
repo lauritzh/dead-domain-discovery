@@ -42,7 +42,8 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
                 storedDomains[domain.domain] = {
                   timestamp: now,
                   pageUrl: domain.pageUrl,
-                  sinkElement: domain.sinkElement
+                  sinkElement: domain.sinkElement,
+                  dead: !resolvable
                 };
                 chrome.storage.local.set({ domains: storedDomains });
                 if (!resolvable) {

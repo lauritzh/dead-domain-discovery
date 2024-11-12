@@ -26,6 +26,14 @@ This extension uses the [Chrome Notification API](https://developer.chrome.com/d
 ![Notification](/img/notification2.png)
 </details>
 
+## Notable Releases
+* **0.1**: Initial Release
+* **0.2**: Skip IPs
+* **0.3**: Add basic options (<a href="https://github.com/svennergr">@svennergr</a>)
+* **0.4**: Add basic history
+* **0.5**: Scan for dead domains in e-mail addresses
+* **0.6**: Fix history of findings in pop-up (previously all cached domains were printed)
+
 ## Privacy
 The extension does not disclose any information to its author, but uses an HTTP GET request to `https://dns.google/resolve?name=${domain}` to lookup newly discovered domains. Please note that when activated, the extension runs in background and analyses all page loads.
 
@@ -47,3 +55,7 @@ Thanks a lot!
 
 ## Disclaimer
 *Any information shared within this repository must not be used with malicious intentions. This tool is shared for educational purposes only. Any malicious use will not hold the author responsible.*
+
+## Example
+
+If set up correctly, the extension should complain about [this link](https://invalid-link.lhq.at) and the following ![image](https://invalid-image.lhq.at).
