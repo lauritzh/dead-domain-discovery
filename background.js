@@ -39,13 +39,13 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
           if (!storedDomains.hasOwnProperty(domain.domain)) {
             if (!isIpAddress(domain.domain)) {
               resolveDomain(domain.domain, (resolvable) => {
-                storedDomains[domain.domain] = {
-                  timestamp: now,
-                  pageUrl: domain.pageUrl,
-                  sinkElement: domain.sinkElement
-                };
-                chrome.storage.local.set({ domains: storedDomains });
                 if (!resolvable) {
+                  storedDomains[domain.domain] = {
+                    timestamp: now,
+                    pageUrl: domain.pageUrl,
+                    sinkElement: domain.sinkElement
+                  };
+                  chrome.storage.local.set({ domains: storedDomains });
                   createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
                 }
               });
