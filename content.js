@@ -124,4 +124,18 @@ function isIpAddress(domain) {
   return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(domain);
 }
 
-scanPage();
+function isIgnoredDomain(pageUrl, ignoredDomains) {
+  const hostname = (new URL(pageUrl)).hostname;
+  return ignoredDomains.includes(hostname);
+}
+
+chrome.storage.sync.get({ ignoredDomains: [] }, (items) => {
+  const ignoredDomains = items.ignoredDomains;
+  const pageUrl = window.location.href;
+  
+  if (!isIgnoredDomain(pageUrl, ignoredDomains)) {
+    scanPage();
+  } else {
+    console.log(`Skipping scan for ignored domain: ${pageUrl}`);
+  }
+});

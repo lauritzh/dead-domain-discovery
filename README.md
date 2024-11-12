@@ -33,6 +33,7 @@ This extension uses the [Chrome Notification API](https://developer.chrome.com/d
 * **0.4**: Add basic history
 * **0.5**: Scan for dead domains in e-mail addresses
 * **0.6**: Fix history of findings in pop-up (previously all cached domains were printed)
+* **0.7**: Exclude domains from scanning
 
 ## Privacy
 The extension does not disclose any information to its author, but uses an HTTP GET request to `https://dns.google/resolve?name=${domain}` to lookup newly discovered domains. Please note that when activated, the extension runs in background and analyses all page loads.
