@@ -9,9 +9,12 @@ ZIP_FILE="dead_domain_discovery_$CURRENT_DATE.zip"
 # List of files to include in the zip file based on the manifest
 FILES=(
   "manifest.json"
+  "content.js"
   "background.js"
   "popup.html"
+  "popup.js"
   "options.html"
+  "options.js"
   "icons/icon16.png"
   "icons/icon32.png"
   "icons/icon48.png"
