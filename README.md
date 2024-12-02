@@ -10,7 +10,9 @@ If an abandoned domain is used within these sinks, which can be registered by ma
 ## Installation
 *Always keep in mind that browser extensions have broad access to sensitive data! Therefore, it is recommended to install this extension only to browsers that are solely used for security analysis or development purposes. One great example for this is [PortSwigger's Burp Suite embedded browser](https://portswigger.net/burp/documentation/desktop/functions/embedded-browser).*
 
-Steps to install:
+Recommended way to install is via the [Chrome Web Store](https://chromewebstore.google.com/detail/dead-domain-discovery/opfeoiaampdaohnfgbbgagiicfidhegd).
+
+Steps to install (manual):
 1. Clone this repository via `git clone https://github.com/lauritzh/dead-domain-discovery`.
 2. Navigate to `chrome://extensions/` with your Chromium browser.
 3. Enable *Developer mode* (attention, do not enable this option in your "productive" browser!).
