@@ -50,7 +50,7 @@ function scanPage() {
     if (href && isHttpUrl(href)) {
       resources.anchors.push({ url: href, element: 'a' });
     } else if (href && href.startsWith('mailto:')) {
-      resources.anchors.push({ url: href.replace('mailto:','mailto://'), element: 'a > mailto' });
+      resources.anchors.push({ url: href.replace('mailto://','mailto:').replace('mailto:','mailto://').replace('%40','@'), element: 'a > mailto' });
     }
   });
 
