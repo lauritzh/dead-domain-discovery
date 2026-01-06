@@ -4,14 +4,32 @@
 
 const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
-chrome.webNavigation.onCompleted.addListener((details) => {
-  if (details?.tab?.url?.startsWith("chrome://")) return undefined;
+function isInjectableUrl(url) {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
 
-  chrome.scripting.executeScript({
-    target: { tabId: details.tabId },
-    files: ['content.js']
-  });
-}, { url: [{ urlMatches: 'https?://*/*' }] });
+chrome.webNavigation.onCompleted.addListener((details) => {
+  if (!isInjectableUrl(details.url)) return;
+
+  chrome.scripting.executeScript(
+    {
+      target: { tabId: details.tabId },
+      files: ['content.js']
+    },
+    () => {
+      const err = chrome.runtime.lastError;
+      if (err && !err.message.includes('Cannot access a chrome:// URL')) {
+        console.warn('Failed to inject content script:', err.message);
+      }
+    }
+  );
+}, { url: [{ urlMatches: '^https?://' }] });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'checkDomains') {
