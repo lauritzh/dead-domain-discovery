@@ -27,6 +27,8 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
 
         let storedDomains = domains || {};
         const now = Date.now();
+        const domainResults = {};
+        let pendingCount = 0;
 
         // Clean up old entries
         for (let domain in storedDomains) {
@@ -38,16 +40,23 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
         pageDomains.forEach(domain => {
           if (!storedDomains.hasOwnProperty(domain.domain)) {
             if (!isIpAddress(domain.domain)) {
+              pendingCount++;
               resolveDomain(domain.domain, (resolvable) => {
-                storedDomains[domain.domain] = {
+                domainResults[domain.domain] = {
                   timestamp: now,
                   pageUrl: domain.pageUrl,
                   sinkElement: domain.sinkElement,
                   dead: !resolvable
                 };
-                chrome.storage.local.set({ domains: storedDomains });
+                pendingCount--;
+
                 if (!resolvable) {
                   createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
+                }
+
+                if (pendingCount === 0) {
+                  Object.assign(storedDomains, domainResults);
+                  chrome.storage.local.set({ domains: storedDomains });
                 }
               });
             }
