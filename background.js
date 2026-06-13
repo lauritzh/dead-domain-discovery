@@ -27,6 +27,8 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
 
         let storedDomains = domains || {};
         const now = Date.now();
+        const domainResults = {};
+        let pendingCount = 0;
 
         // Clean up old entries
         for (let domain in storedDomains) {
@@ -37,17 +39,33 @@ function checkAndStoreDomains(pageDomains, pageUrl) {
 
         pageDomains.forEach(domain => {
           if (!storedDomains.hasOwnProperty(domain.domain)) {
-            if (!isIpAddress(domain.domain)) {
+            if (!isIpAddress(domain.domain) && domain.domain && domain.domain.trim() !== '') {
+              pendingCount++;
               resolveDomain(domain.domain, (resolvable) => {
-                storedDomains[domain.domain] = {
+                domainResults[domain.domain] = {
                   timestamp: now,
                   pageUrl: domain.pageUrl,
                   sinkElement: domain.sinkElement,
                   dead: !resolvable
                 };
-                chrome.storage.local.set({ domains: storedDomains });
+                pendingCount--;
+
                 if (!resolvable) {
                   createNotification(`Domain not resolvable: ${domain.domain}\n\nFound on: ${domain.pageUrl}\n\nElement: ${domain.sinkElement}`);
+                }
+
+                if (pendingCount === 0) {
+                  // Re-read the latest stored domains to avoid overwriting
+                  // results written by overlapping checkAndStoreDomains() calls.
+                  chrome.storage.local.get(['domains'], ({ domains: latestDomains }) => {
+                    const base = latestDomains || {};
+                    const merged = Object.assign({}, base, domainResults);
+                    // Drop anything that has expired relative to the current batch's cacheDuration.
+                    for (const d of Object.keys(merged)) {
+                      if (merged[d].timestamp < now - cacheDuration) delete merged[d];
+                    }
+                    chrome.storage.local.set({ domains: merged });
+                  });
                 }
               });
             }
@@ -62,7 +80,10 @@ function isIpAddress(domain) {
 }
 
 function resolveDomain(domain, callback) {
-  if (domain.trim() != '') {
+  // Always call the callback, even for blank/invalid domains, so callers
+  // using a pendingCount-based barrier (e.g. checkAndStoreDomains) don't
+  // hang waiting for a decrement that never comes.
+  if (domain && domain.trim() !== '') {
     fetch(`https://dns.google/resolve?name=${domain}`)
       .then(response => response.json())
       .then(data => {
@@ -71,6 +92,8 @@ function resolveDomain(domain, callback) {
       .catch(() => {
         callback(false);
       });
+  } else {
+    callback(false);
   }
 }
 
